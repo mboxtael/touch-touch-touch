@@ -5,9 +5,11 @@ import Board from './Board';
 
 const Game = props => (
   <View style={styles.game}>
-    <Text>Touch!</Text>
-    <Text>Lives: {props.lives}</Text>
-    <Text>Points: {props.points}</Text>
+    <Text style={styles.title}>Touch!</Text>
+    <View style={styles.statusBar}>
+      <Text style={styles.textBar}>Lives: {props.lives}</Text>
+      <Text style={styles.textBar}>POINTS: {props.points}</Text>
+    </View>
     {props.lives > 0 ? (
       <View style={styles.board}>
         <Board onTouch={props.onTouch} />
@@ -27,13 +29,24 @@ const Game = props => (
 const styles = StyleSheet.create({
   game: {
     flex: 1,
-    backgroundColor: 'steelblue'
+    padding: 15
   },
   board: {
     flex: 1,
-    margin: 15,
-    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    backgroundColor: 'rgba(228, 228, 228, 0.5)',
     borderRadius: 5
+  },
+  statusBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  textBar: {
+    fontWeight: 'bold'
+  },
+  title: {
+    fontSize: 25,
+    fontStyle: 'italic',
+    alignSelf: 'center'
   }
 });
 
