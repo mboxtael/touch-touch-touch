@@ -1,5 +1,6 @@
 import React from 'react';
 import { Button, View, Text, StyleSheet } from 'react-native';
+import { Link } from 'react-router-native';
 import Board from './Board';
 
 const Game = props => (
@@ -9,8 +10,11 @@ const Game = props => (
       <Board onTouch={props.onTouch} />
     ) : (
       <View>
-        <Text>You loose!</Text>
+        <Text>You lose!</Text>
         <Button onPress={props.onTryAgain} title="Try Again" />
+        <Link to="/">
+          <Text>Menu</Text>
+        </Link>
       </View>
     )}
   </View>
@@ -19,7 +23,7 @@ const Game = props => (
 const styles = StyleSheet.create({
   game: {
     flex: 1,
-    backgroundColor: 'powderblue',
+    backgroundColor: 'powderblue'
   }
 });
 

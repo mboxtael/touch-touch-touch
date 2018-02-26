@@ -4,6 +4,7 @@ import {
   GraphRequestManager,
   LoginManager
 } from 'react-native-fbsdk';
+import { ActivityIndicator } from 'react-native';
 import { connect } from 'react-redux';
 import { includes } from 'lodash';
 import Game from './component';
@@ -17,12 +18,9 @@ class GameContainer extends Component {
     super(props);
     this.state = {
       lives: 3,
-      points: 0
+      points: 0,
+      isLoading: false
     };
-  }
-
-  async componentDidMount() {
-    // await this._publishScore('5');
   }
 
   _publishScore = async score => {
@@ -50,22 +48,19 @@ class GameContainer extends Component {
         httpMethod: 'POST',
         parameters: {
           score: {
-            string: score
+            string: score.toString()
           }
         }
       },
       this._responseInfoCallback
     );
 
+    this.setState({ isLoading: !this.state.isLoading });
     new GraphRequestManager().addRequest(infoRequest).start();
   };
 
   _responseInfoCallback = (error, result) => {
-    if (error) {
-      console.log(error);
-    } else {
-      console.log(result);
-    }
+    this.setState({ isLoading: !this.state.isLoading });
   };
 
   handleTouch = hit => {
@@ -75,7 +70,11 @@ class GameContainer extends Component {
     } else {
       action.lives = --this.state.lives;
     }
-    this.setState({ ...action });
+    this.setState({ ...action }, async () => {
+      if (this.state.lives == 0) {
+        await this._publishScore(this.state.points);
+      }
+    });
   };
 
   handleTryAgain = () => {
@@ -83,13 +82,15 @@ class GameContainer extends Component {
   };
 
   render() {
-    return (
+    return !this.state.isLoading ? (
       <Game
         lives={this.state.lives}
         points={this.state.points}
         onTouch={this.handleTouch}
         onTryAgain={this.handleTryAgain}
       />
+    ) : (
+      <ActivityIndicator />
     );
   }
 }
