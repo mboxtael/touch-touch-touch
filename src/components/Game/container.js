@@ -74,7 +74,7 @@ class GameContainer extends Component {
           if (error) {
             reject();
           } else {
-            resolve(result.data);
+            resolve(result.data[0].score);
           }
         }
       );
@@ -90,9 +90,11 @@ class GameContainer extends Component {
       action.lives = --this.state.lives;
     }
     this.setState({ ...action }, async () => {
-      const prevScore = await this._getScore();
-      if (this.state.lives == 0 && this.state.points > prevScore) {
-        await this._publishScore(this.state.points);
+      if (this.state.lives == 0) {
+        const prevScore = await this._getScore();
+        if (this.state.points > prevScore) {
+          await this._publishScore(this.state.points);
+        }
       }
     });
   };
