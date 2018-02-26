@@ -6,6 +6,8 @@ import Board from './Board';
 const Game = props => (
   <View style={styles.game}>
     <Text>Touch!</Text>
+    <Text>Lives: {props.lives}</Text>
+    <Text>Points: {props.points}</Text>
     {props.lives > 0 ? (
       <Board onTouch={props.onTouch} />
     ) : (
