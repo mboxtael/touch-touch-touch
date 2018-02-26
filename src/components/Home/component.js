@@ -5,6 +5,7 @@ import Login from '../Login';
 
 const Home = ({ player }) => (
   <View style={styles.menu}>
+    <Text style={styles.brand}>Touch, Touch, Touch!</Text>
     {player.accessToken && (
       <View>
         <Link to="/game">
@@ -24,6 +25,11 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center'
+  },
+  brand: {
+    fontSize: 25,
+    fontStyle: 'italic',
+    fontWeight: '500'
   }
 });
 

@@ -5,7 +5,7 @@ import Board from './Board';
 
 const Game = props => (
   <View style={styles.game}>
-    <Text style={styles.title}>Touch!</Text>
+    <Text style={styles.brand}>Touch, Touch, Touch!</Text>
     <View style={styles.statusBar}>
       <Text style={styles.textBar}>Lives: {props.lives}</Text>
       <Text style={styles.textBar}>POINTS: {props.points}</Text>
@@ -43,9 +43,10 @@ const styles = StyleSheet.create({
   textBar: {
     fontWeight: 'bold'
   },
-  title: {
+  brand: {
     fontSize: 25,
     fontStyle: 'italic',
+    fontWeight: '500',
     alignSelf: 'center'
   }
 });
