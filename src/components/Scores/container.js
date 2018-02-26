@@ -12,10 +12,10 @@ const mapDispatchToProps = { setPlayer };
 class ScoresContainer extends Component {
   constructor(props) {
     super(props);
+    this.state = { isLoading: true };
   }
 
   componentDidMount() {
-    console.log(this.props.player);
     const infoRequest = new GraphRequest(
       '/567944576917184/scores',
       { accessToken: this.props.player.accessToken },
@@ -26,16 +26,21 @@ class ScoresContainer extends Component {
   }
 
   _responseInfoCallback = (error, result) => {
-    console.log('callback', error, result)
     if (error) {
       console.log(error);
     } else {
       this.props.setPlayer({ friendsScores: result.data });
+      this.setState({ isLoading: false });
     }
   };
 
   render() {
-    return <Scores scores={this.props.player.friendsScores} />;
+    return (
+      <Scores
+        isLoading={this.state.isLoading}
+        scores={this.props.player.friendsScores}
+      />
+    );
   }
 }
 
