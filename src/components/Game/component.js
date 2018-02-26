@@ -9,7 +9,9 @@ const Game = props => (
     <Text>Lives: {props.lives}</Text>
     <Text>Points: {props.points}</Text>
     {props.lives > 0 ? (
-      <Board onTouch={props.onTouch} />
+      <View style={styles.board}>
+        <Board onTouch={props.onTouch} />
+      </View>
     ) : (
       <View>
         <Text>You lose!</Text>
@@ -25,7 +27,13 @@ const Game = props => (
 const styles = StyleSheet.create({
   game: {
     flex: 1,
-    backgroundColor: 'powderblue'
+    backgroundColor: 'steelblue'
+  },
+  board: {
+    flex: 1,
+    margin: 15,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    borderRadius: 5
   }
 });
 

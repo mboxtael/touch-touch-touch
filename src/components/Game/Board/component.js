@@ -7,12 +7,15 @@ import {
   Image
 } from 'react-native';
 
-const Umpa = ({ fill, onPress }) => (
+const Umpa = ({ fill, showCoins, onPress }) => (
   <TouchableNativeFeedback onPress={onPress}>
     <View style={styles.umpa}>
       {fill ? (
         <Image
-          resizeMode="center"
+          style={{
+            opacity: showCoins ? 1 : 0,
+            resizeMode: 'center'
+          }}
           source={require('../../../images/coin.png')}
         />
       ) : null}
@@ -20,13 +23,14 @@ const Umpa = ({ fill, onPress }) => (
   </TouchableNativeFeedback>
 );
 
-const Board = ({ positions, onPressUmpa }) => (
+const Board = ({ positions, showCoins, onPressUmpa }) => (
   <View style={styles.board}>
     {positions.map((position, i) => (
       <View style={styles.line} key={i}>
         {position.map((fill, j) => (
           <Umpa
             fill={fill}
+            showCoins={showCoins}
             onPress={() => onPressUmpa(i, j)}
             key={`${i}${j}`}
           />
@@ -43,8 +47,6 @@ const styles = StyleSheet.create({
   },
   umpa: {
     flex: 1,
-    backgroundColor: 'steelblue',
-    borderWidth: 1,
     justifyContent: 'center',
     alignItems: 'center'
   },

@@ -6,7 +6,8 @@ export default class BoardContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      positions: this._generatePositions(5, 5)
+      positions: this._generatePositions(5, 5),
+      showCoins: false
     };
   }
 
@@ -22,15 +23,25 @@ export default class BoardContainer extends Component {
   };
 
   handlePressUmpa = (i, j) => {
+    if (this.state.showCoins) {
+      return;
+    }
+    
     this.props.onTouch(this.state.positions[i][j]);
-    this.setState({
-      positions: this._generatePositions(5, 5)
+    this.setState({ showCoins: true }, () => {
+      setTimeout(() => {
+        this.setState({
+          showCoins: false,
+          positions: this._generatePositions(5, 5)
+        });
+      }, 1000);
     });
   };
 
   render() {
     return (
       <Board
+        showCoins={this.state.showCoins}
         positions={this.state.positions}
         onPressUmpa={this.handlePressUmpa}
       />
