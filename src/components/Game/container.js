@@ -63,6 +63,25 @@ class GameContainer extends Component {
     this.setState({ isLoading: !this.state.isLoading });
   };
 
+  _getScore = async =>
+    new Promise((resolve, reject) => {
+      const infoRequest = new GraphRequest(
+        `/${this.props.player.fbData.userID}/scores`,
+        {
+          accessToken: this.props.player.accessToken
+        },
+        (error, result) => {
+          if (error) {
+            reject();
+          } else {
+            resolve(result.data);
+          }
+        }
+      );
+
+      new GraphRequestManager().addRequest(infoRequest).start();
+    });
+
   handleTouch = hit => {
     const action = {};
     if (hit) {
@@ -71,7 +90,8 @@ class GameContainer extends Component {
       action.lives = --this.state.lives;
     }
     this.setState({ ...action }, async () => {
-      if (this.state.lives == 0) {
+      const prevScore = await this._getScore();
+      if (this.state.lives == 0 && this.state.points > prevScore) {
         await this._publishScore(this.state.points);
       }
     });
