@@ -1,13 +1,12 @@
 const initialState = {
   accessToken: null,
-  userID: null,
-  friendsScores: []
+  friendsScores: [],
+  fbData: null
 };
 
 export default function(state = initialState, action) {
   switch (action.type) {
     case 'SET_PLAYER':
-      console.log(action.player)
       return { ...state, ...action.player };
       break;
     default:

@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { AccessToken, LoginManager } from 'react-native-fbsdk';
+import { AccessToken } from 'react-native-fbsdk';
 import { Redirect } from 'react-router-native';
 import { setPlayer } from '../../actions/player';
-import Login from './component';
+import { LoginButton } from 'react-native-fbsdk';
 import { ActivityIndicator } from 'react-native';
 
 const mapDispatchToProps = { setPlayer };
@@ -17,7 +17,10 @@ class LoginContainer extends Component {
   async componentDidMount() {
     const data = await AccessToken.getCurrentAccessToken();
     if (data) {
-      this.props.setPlayer({ accessToken: data.accessToken.toString() });
+      this.props.setPlayer({
+        accessToken: data.accessToken.toString(),
+        fbData: data
+      });
     }
     this.setState({ isLoading: false });
   }
@@ -31,25 +34,9 @@ class LoginContainer extends Component {
       AccessToken.getCurrentAccessToken().then(data => {
         this.props.setPlayer({
           accessToken: data.accessToken.toString(),
-          userID: data.userID
+          fbData: data
         });
       });
-      // LoginManager.logInWithReadPermissions(['user_friends']).then(
-      //   result => {
-      //     if (result.isCancelled) {
-      //       alert('Login cancelled');
-      //     } else {
-      //       alert(
-      //         'Login success with permissions: ' +
-      //           result.grantedPermissions.toString()
-      //       );
-            
-      //     }
-      //   },
-      //   error => {
-      //     alert('Login fail with error: ' + error);
-      //   }
-      // );
     }
   };
 
@@ -61,7 +48,8 @@ class LoginContainer extends Component {
     return this.state.isLoading ? (
       <ActivityIndicator />
     ) : (
-      <Login
+      <LoginButton
+        readPermissions={['user_friends', 'public_profile']}
         onLoginFinished={this.handleLoginFinished}
         onLogoutFinished={this.handleLogoutFinished}
       />
