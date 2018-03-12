@@ -3,35 +3,33 @@ import {
   View,
   Text,
   StyleSheet,
-  TouchableNativeFeedback,
+  TouchableWithoutFeedback,
   Image
 } from 'react-native';
 
-const Umpa = ({ fill, showCoins, onPress }) => (
-  <TouchableNativeFeedback onPress={onPress}>
+const Umpa = ({ fill, onPress }) => (
+  <TouchableWithoutFeedback onPress={onPress}>
     <View style={styles.umpa}>
       {fill ? (
         <Image
           style={{
-            opacity: showCoins ? 1 : 0,
             resizeMode: 'center'
           }}
           source={require('../../../images/coin.png')}
         />
       ) : null}
     </View>
-  </TouchableNativeFeedback>
+  </TouchableWithoutFeedback>
 );
 
-const Board = ({ positions, showCoins, onPressUmpa }) => (
+const Board = ({ positions, disable, onPressUmpa }) => (
   <View style={styles.board}>
     {positions.map((position, i) => (
       <View style={styles.line} key={i}>
         {position.map((fill, j) => (
           <Umpa
             fill={fill}
-            showCoins={showCoins}
-            onPress={() => onPressUmpa(i, j)}
+            onPress={() => !disable && onPressUmpa(i, j)}
             key={`${i}${j}`}
           />
         ))}

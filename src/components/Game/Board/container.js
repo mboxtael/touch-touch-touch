@@ -1,14 +1,21 @@
 import React, { Component } from 'react';
 import Board from './component';
 import { random } from 'lodash';
+import { setInterval } from 'core-js';
 
 export default class BoardContainer extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      positions: this._generatePositions(5, 5),
-      showCoins: false
-    };
+    this.state = { positions: [], intervalId: null, disable: true };
+  }
+
+  componentDidMount() {
+    const intervalId = setInterval(this._updateBoardPositions, 1000);
+    this.setState({ intervalId: intervalId });
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
   }
 
   _generatePositions = (rows, cols) => {
@@ -22,26 +29,22 @@ export default class BoardContainer extends Component {
     return positions;
   };
 
-  handlePressUmpa = (i, j) => {
-    if (this.state.showCoins) {
-      return;
-    }
-    
-    this.props.onTouch(this.state.positions[i][j]);
-    this.setState({ showCoins: true }, () => {
-      setTimeout(() => {
-        this.setState({
-          showCoins: false,
-          positions: this._generatePositions(5, 5)
-        });
-      }, 1000);
+  _updateBoardPositions = () => {
+    this.setState({
+      positions: this._generatePositions(5, 5),
+      disable: false
     });
+  };
+
+  handlePressUmpa = (i, j) => {
+    this.setState({ disable: true });
+    this.props.onTouch(this.state.positions[i][j]);
   };
 
   render() {
     return (
       <Board
-        showCoins={this.state.showCoins}
+        disable={this.state.disable}
         positions={this.state.positions}
         onPressUmpa={this.handlePressUmpa}
       />
